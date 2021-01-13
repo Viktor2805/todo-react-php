@@ -25,16 +25,19 @@ class AuthCookies extends User  {
     }
 
     public function getTokenByUserEmail($email) {
-        $result = $this->conn->prepare(
-        "SELECT token 
-           FROM users 
-              WHERE email = :email LIMIT 1");
+        try {
+        $result = $this->conn->prepare("SELECT token 
+            FROM users 
+                WHERE email = :email LIMIT 1");
         $result->bindParam(':email', $email, PDO::PARAM_STR);
         $result->execute();
         if ($result->rowCount()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
+            return $result->fetch(PDO::FETCH_ASSOC); 
         } else {
             return false;
+        }
+        } catch (PDOException $e) {
+            return $e->getMessage();
         }
     }
 
@@ -42,6 +45,7 @@ class AuthCookies extends User  {
         if (isset($_COOKIE["token"]) && isset($_COOKIE["email"])) {
             setcookie("token", "");
             setcookie("email", "");
+            setcookie('PHPSESSID', 0,1);    
         }
     }
 }

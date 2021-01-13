@@ -2,13 +2,15 @@
     
 require_once "index.php";
 
+// If user is logged with cookies, then redirect to build page 
 if (isset($_SESSION["isLoggedIn"])) {
     if ($_SESSION["isLoggedIn"]) {
         header("Location:../build");
     }
 }
 
-if( isset($_SESSION["message_error"])) {
+// Handling errors from login form
+if(isset($_SESSION["message_error"])) {
     $message = $_SESSION["message_error"];
     unset($_SESSION["message_error"]);
 }
@@ -59,6 +61,11 @@ if( isset($_SESSION["message_error"])) {
 a { 
     text-decoration: none;
     color:#0074D9;
+}
+
+.error-message {
+  color:#FF4136;
+  font-weight:bold;
 }
 
 </style>

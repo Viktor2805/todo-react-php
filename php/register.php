@@ -1,3 +1,13 @@
+<?php 
+// require_once "index.php";
+
+if( isset($_SESSION["message_error"])) {
+  $message = $_SESSION["message_error"];
+  unset($_SESSION["message_error"]);
+}
+
+?>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -98,6 +108,12 @@ input[type="submit"]:active {
   transition: 0.1s ease;
 }
 
+.error-message {
+  margin-top:8px;
+  color:#FF4136;
+  font-weight:bold;
+}
+
 </style>
 <body>
     <div id="login-box">
@@ -106,8 +122,9 @@ input[type="submit"]:active {
             <input type="text" name="name" placeholder="Username" required="required" />
             <input type="text" name="email" placeholder="E-mail" required="required" />
             <input type="password" name="password" placeholder="Password" required="required" />
-            <input type="password" name="password_confirm" placeholder="Retype password" required="required" />
+            <input value="<?php if(isset($message)) { echo $message; } ?>" type="password" name="password_confirm" placeholder="Retype password" required="required" />
             <input type="submit" name="register" value="Sign me up" />
+            <div class="error-message"><?php if(isset($message)) { echo $message; } ?></div>
         </form>
     </div>
 

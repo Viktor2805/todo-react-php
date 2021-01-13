@@ -1,14 +1,14 @@
 <?php
 require_once "index.php";
 
-$_SESSION["logout"] = true;
-
-//Clear Session
+// Clear Session
 session_destroy();
+session_unset();     
 
 // clear cookies
 $authCookies->clearAuthCookie();
 
+// Redirect to login page
 $user->redirect("/react_todo/php/login.php");
 ob_end_flush();
 ?>

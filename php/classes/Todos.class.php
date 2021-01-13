@@ -4,6 +4,23 @@ class Todos extends User {
     function __construct() {
         $this->conn = $this->connect(); 
     }
+    
+    public function todoByDefault() {
+        try {
+            $todos = [":text" => "welcome", ":title" => "welcome", ":UserId" => $_SESSION["user_id"]];
+            $stmt = $this->conn->prepare("INSERT INTO todos (title,text,UserId)
+            VALUES (:title, :text, :UserId)");
+    
+            //Bind our values to the parameters using foreach
+            foreach ($todos as $key => &$val) {
+                $stmt->bindParam($key, $val);
+            }
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function showTodos() {
         try {
             $result = $this->conn->prepare("SELECT * FROM todos WhERE UserId = :UserId");
@@ -24,7 +41,6 @@ class Todos extends User {
             $stmt->bindParam(':todo_title', $todo_title);
             $stmt->bindParam(':UserId',$_SESSION["user_id"]);
             $stmt->execute();
-            return true;
         } catch (PDOException $e) {
             return $e->getMessage();
         }
@@ -36,7 +52,6 @@ class Todos extends User {
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':todo_id', $todo_id);
             $stmt->execute();
-            return true;
         } catch (PDOException $e) {
             return $e->getMessage();
         }
@@ -56,7 +71,6 @@ class Todos extends User {
             //Bind our :model parameter.
             $statement->bindValue(':todo_is_completed', $todo_is_completed);
             $statement->execute(); 
-            return true;
         } catch (PDOException $e) {
             return $e->getMessage();
         }
@@ -74,7 +88,6 @@ class Todos extends User {
             $stmt->bindParam(':todo_title', $todo_title);
             $stmt->bindParam(':todo_id', $todo_id);
             $stmt->execute();
-            return true;
         } catch (PDOException $e) {
             return $e->getMessage();
         }
